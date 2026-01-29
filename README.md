@@ -1,64 +1,39 @@
-# ✈️ Flight Price Monitor & Alert Bot
+# ✈️ Advanced Flight Price Monitor & Pipeline
 
-Este é um projeto de automação de dados desenvolvido em Python que monitora preços de passagens aéreas em tempo real, realiza conversão de moeda e notifica o usuário via e-mail sobre oportunidades de viagem.
+Este projeto é um pipeline de Engenharia de Dados em Python que automatiza o monitoramento de passagens aéreas para múltiplas rotas internacionais. O bot integra dados de voos, câmbio em tempo real e enriquecimento geográfico para gerar insights prontos para Business Intelligence (Power BI/Tableau).
 
 
+## 🌟 Diferenciais Técnicos
 
-## 🚀 Funcionalidades
+- **Multi-Route Tracking**: Monitora uma `WISHLIST` de destinos simultaneamente em um único ciclo de execução.
+- **Data Enrichment**: 
+    - Converte preços dinamicamente de EUR/USD para **BRL** via AwesomeAPI.
+    - Traduz códigos aeroportuários (IATA) para nomes de **Países** usando Reference Data.
+- **Robustez e Segurança**:
+    - Gestão de credenciais via variáveis de ambiente (`.env`).
+    - Tratamento de erros de permissão (ex: arquivo aberto no Excel).
+    - Sistema de Cache local para otimizar chamadas de API.
+- **Tidy Data Architecture**: Logs salvos em formato longo, ideal para análise de séries temporais e dashboards.
 
-- **Data Ingestion**: Consumo de dados reais de mais de 400 companhias aéreas através da API **Amadeus**.
-- **Data Enrichment**: Integração com a **AwesomeAPI** para conversão automática de câmbio (EUR/USD para BRL).
-- **Storage (Logs)**: Armazenamento estruturado de cada consulta em um arquivo `.csv` usando **Pandas**, criando um histórico de volatilidade.
-- **Automated Alerting**: Sistema de notificação via **SMTP (Gmail)** que dispara alertas quando o preço atinge um valor alvo.
+## 🛠️ Stack Tecnológica
 
-## 🛠️ Tecnologias Utilizadas
-
-* **Python 3.x**
-* **Pandas**: Manipulação e estruturação de dados.
-* **Amadeus Python SDK**: Conexão com a API de viagens.
-* **Requests**: Consumo da API de câmbio.
-* **Smtplib & Email.Message**: Automação de envios de e-mail.
+* **Linguagem**: Python 3.13
+* **Libs Principais**: Pandas, Amadeus SDK, Requests, Python-Dotenv
+* **Protocolos**: REST APIs, SMTP (TLS/SSL)
 
 ## 📋 Pré-requisitos
 
-Antes de rodar o script, você precisará:
-
-1.  Uma conta no [Amadeus for Developers](https://developers.amadeus.com/) para obter seu `API Key` e `API Secret`.
-2.  Uma **Senha de App** do Google (caso use Gmail) para o envio de e-mails via SMTP.
-3.  Instalar as dependências:
+1.  Obtenha suas chaves de API em [Amadeus for Developers](https://developers.amadeus.com/).
+2.  Crie uma **Senha de App** no seu Gmail para o envio de alertas.
+3.  Instale as dependências:
     ```bash
-    pip install pandas amadeus requests
+    pip install pandas amadeus requests python-dotenv
     ```
 
-## 🔧 Configuração e Uso
+## ⚙️ Configuração
 
-1.  Clone o repositório.
-2.  No arquivo principal, insira suas credenciais da Amadeus:
-    ```python
-    amadeus = Client(client_id='SUA_CHAVE', client_secret='SEU_SEGREDO')
-    ```
-3.  Configure o `PrecoAlvo` e o `EmailDestino`.
-4.  Execute o script:
-    ```bash
-    python monitor_voos.py
-    ```
-
-## 📊 Estrutura do Arquivo de Log
-
-O bot gera um arquivo chamado `historico_de_precos.csv` com a seguinte estrutura, ideal para análises no **Power BI**:
-
-| timestamp | companhia | origem | destino | preco | moeda | preco_brl |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 2026-05-15 10:00:01 | Air France | GRU | CDG | 450.00 | EUR | 2745.00 |
-
-
-
-## 📈 Próximos Passos
-
-- [ ] Implementar suporte a múltiplos destinos simultâneos.
-- [ ] Criar um Dashboard no Power BI para visualização da média móvel de preços.
-- [ ] Adicionar tratamento de erros para diferentes moedas de origem.
-
-## ✒️ Autor
-
-* **Bruno Iwamura** - [Seu LinkedIn](https://linkedin.com/in/seu-perfil)
+1. Crie um arquivo `.env` na raiz do projeto:
+   ```text
+   AMADEUS_ID=seu_client_id
+   AMADEUS_SECRET=seu_client_secret
+   EMAIL_PASSWORD=sua_senha_de_app_gmail
